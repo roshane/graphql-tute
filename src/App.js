@@ -1,39 +1,19 @@
-import React, { Component } from 'react';
-import { NICE, SUPER_NICE } from './colors';
+import React from 'react'
+import { render } from 'react-dom'
+import TodoComponent from './components/TodoComponent';
 
-class Counter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { counter: 0 };
-    this.interval = setInterval(() => this.tick(), 1000);
-  }
+class App extends React.Component{
 
-  tick() {
-    this.setState({
-      counter: this.state.counter + this.props.increment
-    });
-  }
+    constructor(){
+        super()
+    }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  render() {
-    return (
-      <h1 style={{ color: this.props.color }}>
-        Counter ({this.props.increment}): {this.state.counter}
-      </h1>
-    );
-  }
+    render(){
+        console.log(`[App] props ${JSON.stringify(this.props)}`);
+        return <div>
+            <TodoComponent {...this.props} />
+        </div>
+    }
 }
 
-export class App extends Component {
-  render() {
-    return (
-      <div>
-        <Counter increment={1} color={NICE} />
-        <Counter increment={5} color={SUPER_NICE} />
-      </div>
-    );
-  }
-}
+export default App;

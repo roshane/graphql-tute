@@ -3,23 +3,20 @@ import Relay from 'react-relay';
 class Mutations extends Relay.Mutation{
 
     getMutation(){
-        return Relay.QL`mutation {addTodo}`;
+        return Relay.QL`mutation {addTask}`;
     }
 
     getVariables() {
-        let {item,completed}=this.props.todo;
-
         return {
-            item,
-            completed
+            text: this.props.task.text
         };
     }
 
     getFatQuery(){
-        return Relay.QL`fragment on TodoItem{
-            id
-            item
-            completed
+        return Relay.QL`fragment on AddTaskMutationPayload{
+            asset{
+                tasks
+            }
         }`
     }
 
@@ -27,16 +24,15 @@ class Mutations extends Relay.Mutation{
         return [{
             type: 'FIELDS_CHANGE',
             fieldIDs: {
-                todo: this.props.todo.id,
+                task: this.props.task.id
             }
-        }]
+        }];
     }
 
     static fragments = {
-        todo :()=>Relay.QL`fragment on TodoItem{
+        task :()=>Relay.QL`fragment on Task{
             id
-            completed
-            item
+            text
         }`
     }
 }

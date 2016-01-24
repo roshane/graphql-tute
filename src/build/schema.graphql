@@ -1,23 +1,27 @@
+input AddTaskMutationInput {
+  text: String
+  clientMutationId: String!
+}
+
+type AddTaskMutationPayload {
+  asset: Asset
+  clientMutationId: String!
+}
+
 type Asset {
-  todos: [TodoItem]
+  tasks: [Task]
+  id: String!
 }
 
-type Mutation {
-  addTodo(input: MutationInput!): TodoItem
+type Mutations {
+  addTask(input: AddTaskMutationInput!): AddTaskMutationPayload
 }
 
-input MutationInput {
-  clientMutationId: String
-  item: String
-  completed: Boolean
+type Query {
+  asset: Asset
 }
 
-type RootQuery {
-  assets(id: Int, completed: Boolean): Asset
-}
-
-type TodoItem {
+type Task {
+  text: String
   id: String
-  item: String
-  completed: Boolean
 }

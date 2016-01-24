@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import Schema from '../src/repo/schema';
+import Schema from '../src/schema/schema';
 import { graphql }  from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
 

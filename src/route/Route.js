@@ -1,12 +1,9 @@
 import Relay from 'react-relay';
-import MainView from './../TodoListView';
+import MainView from './../TaskList';
 
 class Route extends Relay.Route {
     static queries = {
-        assets: ()=> Relay.QL`query {
-            assets
-            ${MainView.getFragment('assets')}
-        }`
+        asset: ()=> Relay.QL`query { asset }`
     };
 
     static routeName = "AppRoute";

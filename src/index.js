@@ -1,14 +1,23 @@
-import React from 'react'
-import { render } from 'react-dom'
-import App from './App'
+import 'babel/polyfill'
 
-var props={
-    addBtnIcon:'glyphicon glyphicon-plus',
-    delBtnIcon:'glyphicon glyphicon-trash',
-    addBtnCls:'btn btn-primary',
-    delBtnCls:'btn btn-danger',
+import React from 'react';
+import { render } from 'react-dom';
+import Relay from 'react-relay';
+
+
+import Route from './route/Route';
+import TodoListView from './TodoListView';
+
+const container = document.getElementById('root');
+
+const loadingFunc=()=>{
+    return <div>
+        Loading.........
+    </div>
 };
 
-var application=React.createElement(App,props);
-
-render(application, document.getElementById('root'))
+render(<Relay.RootContainer
+        Component={TodoListView}
+        route={new Route()}
+        renderLoading={loadingFunc}/>
+, container);

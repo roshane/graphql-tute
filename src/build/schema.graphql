@@ -1,0 +1,23 @@
+type Asset {
+  todos: [TodoItem]
+}
+
+type Mutation {
+  addTodo(input: MutationInput!): TodoItem
+}
+
+input MutationInput {
+  clientMutationId: String
+  item: String
+  completed: Boolean
+}
+
+type RootQuery {
+  assets(id: Int, completed: Boolean): Asset
+}
+
+type TodoItem {
+  id: String
+  item: String
+  completed: Boolean
+}

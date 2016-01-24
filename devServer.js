@@ -3,27 +3,30 @@ var express = require('express');
 var webpack = require('webpack');
 var config = require('./webpack.config.dev');
 
-var app = express();
+var schema = require('./src/repo/schema');
+var graphql = require('graphql');
+var graphqlHTTP = require('express-graphql');
+var WebpackDevServer = require('webpack-dev-server');
 var compiler = webpack(config);
 
-app.use(require('webpack-dev-middleware')(compiler, {
+
+express().use('/graphql', graphqlHTTP({schema: schema, pretty: true, graphiql: true}))
+    .listen(8080, ()=> {
+        console.log('GraphQL at http://localhost:8080/graphql')
+    });
+
+var server = new WebpackDevServer(compiler, {
+    stats: {colors: true},
+    hot:true,
+    publicPath: path.join(__dirname, 'dist'),
     noInfo: true,
+    hot: true,
+    proxy: {'/graphql': 'http://localhost:8080/graphql'},
     publicPath: config.output.publicPath
-}));
-
-app.use(require('webpack-hot-middleware')(compiler));
-//store static resource in the directories
-app.use(express.static('public'));
-
-app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(3000, 'localhost', function (err) {
-    if (err) {
-        console.log(err);
-        return;
-    }
-
-    console.log('Listening at http://localhost:3000');
+server.use(require('webpack-hot-middleware')(compiler));
+server.use(express.static(path.resolve(__dirname, 'public')));
+server.listen(4444, ()=> {
+    console.log('application started http://localhost:4444/');
 });

@@ -1,23 +1,27 @@
-type Asset {
-  todos: [TodoItem]
+type Comment {
+  id: ID
+  text: String
+}
+
+input CreateCommentInput {
+  text: String!
+  clientMutationId: String!
+}
+
+type CreateCommentPayload {
+  story: Story
+  clientMutationId: String!
 }
 
 type Mutation {
-  addTodo(input: MutationInput!): TodoItem
+  createComment(input: CreateCommentInput!): CreateCommentPayload
 }
 
-input MutationInput {
-  clientMutationId: String
-  item: String
-  completed: Boolean
+type Query {
+  story: Story
 }
 
-type RootQuery {
-  assets(id: Int, completed: Boolean): Asset
-}
-
-type TodoItem {
+type Story {
+  comments: [Comment]
   id: String
-  item: String
-  completed: Boolean
 }

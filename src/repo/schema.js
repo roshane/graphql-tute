@@ -1,110 +1,70 @@
-var db = require('./db');
 var graphql = require('graphql');
+var relay = require('graphql-relay');
 
-const TodoItemType = new graphql.GraphQLObjectType({
+const STORY = {
+    comments: [{id:1,text:'sample comment'}],
+    id:1
+};
 
-    name: "TodoItem",
-    description: "This is the entity representation of Todo Item",
-    fields: ()=> {
-        return {
-            id: {
-                type: graphql.GraphQLString,
-                resolve: (todoItem)=>todoItem.id
+var CommentType = new graphql.GraphQLObjectType({
+    name: 'Comment',
+    fields: () => ({
+        id: {type: graphql.GraphQLID},
+        text: {type: graphql.GraphQLString},
+    }),
+});
+
+var StoryType = new graphql.GraphQLObjectType({
+    name: 'Story',
+    fields: () => ({
+        comments: {type: new graphql.GraphQLList(CommentType)},
+        id: {type: graphql.GraphQLString}
+    }),
+});
+
+var CreateCommentMutation = relay.mutationWithClientMutationId({
+    name: 'CreateComment',
+    inputFields: {
+        text: {
+            type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+    },
+    outputFields: {
+        story: {
+            type: StoryType,
+            resolve: () => {
+                console.log('CreateCommentMutation -> outputFields');
+                return STORY;
             },
-            item: {
-                type: graphql.GraphQLString,
-                resolve: (todoItem)=> todoItem.item
+        },
+    },
+    mutateAndGetPayload: (object) => {
+        var newComment = {
+            id: STORY.comments.length,
+            text: object.text,
+        };
+        STORY.comments.push(newComment);
+        console.log(`mutateAndGetPayload [${JSON.stringify(newComment)}]`);
+        return newComment;
+    },
+});
+
+var Schema = new graphql.GraphQLSchema({
+    query: new graphql.GraphQLObjectType({
+        name: 'Query',
+        fields: () => ({
+            story: {
+                type: StoryType,
+                resolve: () => STORY,
             },
-            completed: {
-                type: graphql.GraphQLBoolean,
-                resolve: (todoItem)=> todoItem.completed
-            }
-        }
-    }
+        }),
+    }),
+    mutation: new graphql.GraphQLObjectType({
+        name: 'Mutation',
+        fields: () => ({
+            createComment: CreateCommentMutation,
+        }),
+    }),
 });
 
-const AssetType = new graphql.GraphQLObjectType({
-    name: "Asset",
-    description: "Application assets",
-    fields: ()=> {
-        return {
-            todos: {
-                type: new graphql.GraphQLList(TodoItemType),
-                resolve: (object)=>object.assets
-            }
-        }
-    }
-
-});
-
-const MutationInputType = new graphql.GraphQLInputObjectType({
-    name: "MutationInput",
-    description: "Mutation Input type arguments object",
-    fields: ()=> {
-        return {
-            clientMutationId: {
-                type: graphql.GraphQLString
-            },
-            item: {
-                type: graphql.GraphQLString
-            },
-            completed: {
-                type: graphql.GraphQLBoolean
-            }
-        }
-    }
-
-});
-
-const RootQuery = new graphql.GraphQLObjectType({
-    name: "RootQuery",
-    description: "This is the Root Query of Todo Application Graph API",
-    fields: ()=> {
-        return {
-            assets: {
-                type: AssetType,
-                args: {
-                    id: {
-                        type: graphql.GraphQLInt
-                    },
-                    completed: {
-                        type: graphql.GraphQLBoolean
-                    }
-                },
-                resolve: (_, args)=> {
-                    console.log("resolving todos")
-                    return {assets: db.models.todo.findAll({where: args})};
-                }
-            }
-        }
-    }
-});
-
-const Mutation = new graphql.GraphQLObjectType({
-    name: "Mutation",
-    description: 'Add todo items',
-    fields: ()=> {
-        return {
-            addTodo: {
-                type: TodoItemType,
-                args: {
-                    input: {
-                        type: new graphql.GraphQLNonNull(MutationInputType)
-                    }
-                },
-                resolve: (_, args)=> {
-                    return db.models.todo.create({
-                        item: args.input.item,
-                        completed: args.input.completed
-                    });
-                }
-            }
-        }
-    }
-});
-
-const schema = new graphql.GraphQLSchema({
-    query: RootQuery,
-    mutation: Mutation
-});
-module.exports = schema;
+module.exports = Schema;

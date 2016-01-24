@@ -22,12 +22,15 @@ module.exports = {
             test: /\.js$/,
             loader: ['babel'],
             exclude: /node_modules/,
-            presets: ['react'],
+            presets: ['babel','react'],
             query: {
                 stage: 0,
                 plugins: ['./src/build/babelRelayPlugin']
             },
-            include: path.join(__dirname, 'src')
+            include: [
+                path.join(__dirname, 'src'),
+                path.join(__dirname, 'src/repo')
+            ]
         }]
     }
 };

@@ -1,23 +1,20 @@
 import 'babel/polyfill'
 
+import 'react-router-relay';
 import React from 'react';
 import { render } from 'react-dom';
 import Relay from 'react-relay';
-
-
+import Story from './Story';
 import Route from './route/Route';
-import TodoListView from './TodoListView';
 
-const container = document.getElementById('root');
+const mountNode = document.getElementById('root');
 
-const loadingFunc=()=>{
-    return <div>
-        Loading.........
-    </div>
-};
 
-render(<Relay.RootContainer
-        Component={TodoListView}
+render(
+    <Relay.RootContainer
+        Component={Story}
         route={new Route()}
-        renderLoading={loadingFunc}/>
-, container);
+
+    />,
+    mountNode
+);

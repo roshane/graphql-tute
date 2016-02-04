@@ -17,18 +17,19 @@ class Story extends React.Component {
 
     render() {
         var {comments} = this.props.story;
+        console.log(comments[0])
         return (
             <form onSubmit={this._handleSubmit}>
                 <h1>Breaking News</h1>
-                <p>The peanut is neither a pea nor a nut.</p>
+                <h4>The peanut is neither a pea nor a nut.</h4>
                 <strong>Discuss:</strong>
                 <ul>
                     {comments.map(
-                        (comment,index) => <Comment key={comment.id*index} comment={comment}/>
+                        (comment,index) => <Comment key={index} comment={comment}/>
                     )}
                 </ul>
                 <input
-                    placeholder="Weigh in&hellip;"
+                    placeholder="Enter Something;"
                     ref="newCommentInput"
                     type="text"
                 />

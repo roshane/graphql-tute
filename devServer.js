@@ -17,7 +17,6 @@ express().use('/graphql', graphqlHTTP({schema: schema, pretty: true, graphiql: t
 
 var server = new WebpackDevServer(compiler, {
     stats: {colors: true},
-    hot:true,
     publicPath: path.join(__dirname, 'dist'),
     noInfo: true,
     hot: true,

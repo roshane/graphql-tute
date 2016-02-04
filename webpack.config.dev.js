@@ -5,7 +5,7 @@ module.exports = {
     devtool: 'cheap-module-eval-source-map',
     entry: [
         'eventsource-polyfill', // necessary for hot reloading with IE
-        'webpack-hot-middleware/client',
+        'webpack/hot/dev-server',
         './src/Index'
     ],
     output: {
@@ -28,8 +28,7 @@ module.exports = {
                 plugins: ['./src/build/babelRelayPlugin']
             },
             include: [
-                path.join(__dirname, 'src'),
-                path.join(__dirname, 'src/repo')
+                path.join(__dirname, 'src')
             ]
         }]
     }

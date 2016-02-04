@@ -1,6 +1,6 @@
 import Relay from 'react-relay';
 
-class Mutations extends Relay.Mutation{
+class AddTaskMutation extends Relay.Mutation{
 
     getMutation(){
         return Relay.QL`mutation {addTask}`;
@@ -8,13 +8,14 @@ class Mutations extends Relay.Mutation{
 
     getVariables() {
         return {
-            text: this.props.task.text
+            text: this.props.text
         };
     }
 
     getFatQuery(){
         return Relay.QL`fragment on AddTaskMutationPayload{
             asset{
+                id
                 tasks
             }
         }`
@@ -24,17 +25,17 @@ class Mutations extends Relay.Mutation{
         return [{
             type: 'FIELDS_CHANGE',
             fieldIDs: {
-                task: this.props.task.id
+                asset: this.props.asset.id
             }
         }];
     }
 
     static fragments = {
-        task :()=>Relay.QL`fragment on Task{
+        asset :()=>Relay.QL`fragment on Asset{
             id
-            text
+            tasks
         }`
     }
 }
 
-export default Mutations;
+export default AddTaskMutation;

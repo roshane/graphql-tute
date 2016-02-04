@@ -56,7 +56,7 @@ const AddTaskMutation = relay.mutationWithClientMutationId({
             type: AssetType,
             resolve: ()=> {
                 var index = TASKS.taskList.length - 1;
-                console.log(`returning new task ${JSON.stringify(TASKS.taskList[index])}`)
+                console.log(`returning new task ${JSON.stringify(TASKS.taskList[index])}`);
                 return TASKS;
             }
         }
@@ -68,13 +68,13 @@ const AddTaskMutation = relay.mutationWithClientMutationId({
         };
         TASKS.taskList.push(newTask);
         console.info(`mutateAndGetPayload -> [${JSON.stringify(newTask)}]`);
-        return newTask
+        return TASKS
     }
 });
 
 
 const Mutations = new graphql.GraphQLObjectType({
-    name: "Mutations",
+    name: "AddTaskMutation",
     fields: ()=> {
         return {
             addTask: AddTaskMutation

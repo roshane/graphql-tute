@@ -1,3 +1,7 @@
+type AddTaskMutation {
+  addTask(input: AddTaskMutationInput!): AddTaskMutationPayload
+}
+
 input AddTaskMutationInput {
   text: String
   clientMutationId: String!
@@ -11,10 +15,6 @@ type AddTaskMutationPayload {
 type Asset {
   tasks: [Task]
   id: String!
-}
-
-type Mutations {
-  addTask(input: AddTaskMutationInput!): AddTaskMutationPayload
 }
 
 type Query {

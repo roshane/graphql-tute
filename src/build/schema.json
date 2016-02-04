@@ -5,7 +5,7 @@
         "name": "Query"
       },
       "mutationType": {
-        "name": "Mutations"
+        "name": "AddTaskMutation"
       },
       "subscriptionType": null,
       "types": [
@@ -122,7 +122,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "Mutations",
+          "name": "AddTaskMutation",
           "description": null,
           "fields": [
             {

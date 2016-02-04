@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import Relay from 'react-relay';
 import Task from './Task';
-import Mutation from './Mutations';
+import AddTaskMutation from './AddTaskMutation';
 
 class TaskList extends React.Component {
 
@@ -13,21 +13,18 @@ class TaskList extends React.Component {
     _handleFormSubmit(e) {
         e.preventDefault();
         let text = this.refs.newTaskText.value;
-        Relay.Store.commitUpdate(
-            new Mutation(
-                {
-                    task: {
-                        text: text,
-                        id: this.props.asset.tasks.length + 1
-                    }
-                })
-        );
+        Relay.Store.commitUpdate(new AddTaskMutation({
+            text: text,
+            asset:this.props.asset
+        }));
+        this.refs.newTaskText.value='';
         console.log(`adding new task [${text}]`);
     }
 
     render() {
         console.log(this.props.asset);
         let {id,tasks}=this.props.asset;
+        console.log(`rendered asset id ${id}`);
         return <div>
             <h3>My Task List</h3>
             <ul className="item-list">

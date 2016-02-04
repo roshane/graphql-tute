@@ -20,7 +20,6 @@ const server = new WebpackDevServer(compiler, {
     proxy: {'/graphql': 'http://localhost:8080'},
     hot: true,
     noInfo: true,
-    hot: true,
     publicPath: config.output.publicPath
 });
 
